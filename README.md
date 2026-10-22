@@ -18,7 +18,7 @@ It follows one player, from either of two sources:
 On the panel:
 
 ```bash
-sudo apt install gir1.2-gtk-4.0          # GTK 4's Python bindings
+sudo apt install --no-install-recommends python3-gi gir1.2-gtk-4.0   # GTK 4's Python bindings
 pi-panel-pkg install https://github.com/mattlokes/pi-panel-app-music.git
 $EDITOR ~/.config/pi-panel/apps/music/config.toml
 chmod 600 ~/.config/pi-panel/apps/music/config.toml      # it holds a token
