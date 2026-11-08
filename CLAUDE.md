@@ -1,4 +1,4 @@
-# pi-panel-app-music
+# pi-panel-now-playing
 
 A pi-panel app: an Apple Music-style now-playing screen, fed by Music
 Assistant or a Home Assistant media_player. GTK 4 through PyGObject. The
@@ -10,7 +10,7 @@ uv run pytest      # offline; GTK isn't needed for these
 
 ## The config holds a token
 
-It lives in `~/.config/pi-panel/apps/music/config.toml` on the Pi. A local
+It lives in `~/.config/pi-panel/apps/now-playing/config.toml` on the Pi. A local
 `config.toml` is gitignored. Do not commit it, print it, or paste it into a
 log or a message. Home Assistant's artwork URLs carry a token too, which is
 why `artwork.py` never logs a URL.
@@ -21,15 +21,15 @@ The dev machine has no GTK, so the screen is run on `pi@jazz` (see
 `../../pi-panel-core/CLAUDE.md` for jazz). Without touching the live panel:
 
 ```bash
-rsync -a --delete --exclude .git --exclude .venv --exclude __pycache__ ./ pi@jazz:pi-panel-dev/music/
+rsync -a --delete --exclude .git --exclude .venv --exclude __pycache__ ./ pi@jazz:pi-panel-dev/now-playing/
 # on jazz: a headless compositor, then the app as the unit its slot matches
 systemd-run --user --unit pp-dev -E WLR_BACKENDS=headless -E WLR_RENDERER=gles2 \
     ~/pi-panel-core/pi-panel-core-compositor/build/pi-panel-compositor \
     --ipc-socket /tmp/pp-dev.varlink --wayland-socket pp-dev-0
-varlinkctl call /tmp/pp-dev.varlink io.pipanel.Compositor.RegisterSlot '{"name":"musicdev"}'
-systemd-run --user --wait --unit pi-panel-app@musicdev -E WAYLAND_DISPLAY=pp-dev-0 \
-    -E GTK_A11Y=none -E GDK_DISABLE=vulkan --working-directory=$HOME/pi-panel-dev/music \
-    ~/pi-panel-dev/music/.venv/bin/pi-panel-music --demo --screenshot ~/pi-panel-dev/shot.png
+varlinkctl call /tmp/pp-dev.varlink io.pipanel.Compositor.RegisterSlot '{"name":"now-playingdev"}'
+systemd-run --user --wait --unit pi-panel-app@now-playingdev -E WAYLAND_DISPLAY=pp-dev-0 \
+    -E GTK_A11Y=none -E GDK_DISABLE=vulkan --working-directory=$HOME/pi-panel-dev/now-playing \
+    ~/pi-panel-dev/now-playing/.venv/bin/pi-panel-now-playing --demo --screenshot ~/pi-panel-dev/shot.png
 ```
 
 - `--screenshot` renders the window through GTK itself, so no screenshot tool is needed. The headless output is 1280×720; the layout scales to it.

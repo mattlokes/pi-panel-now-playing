@@ -21,7 +21,7 @@ from ..model import IDLE, PAUSED, PLAYING, NowPlaying
 from .base import NEXT, PLAY_PAUSE, PREVIOUS, SEEK, Backend, BackendError, OnStatus, OnUpdate
 from .base import websocket_url
 
-log = logging.getLogger("pi-panel-music")
+log = logging.getLogger("pi-panel-now-playing")
 
 # MediaPlayerEntityFeature bits in the supported_features attribute.
 FEATURE_SEEK, FEATURE_PREVIOUS, FEATURE_NEXT = 2, 16, 32

@@ -1,5 +1,5 @@
-# pi-panel-app-music configuration.
-# pi-panel-pkg copies this to ~/.config/pi-panel/apps/music/config.toml.
+# pi-panel-now-playing configuration.
+# pi-panel-pkg copies this to ~/.config/pi-panel/apps/now-playing/config.toml.
 # It holds an access token: keep it readable only by you (chmod 600).
 
 # Where "now playing" comes from. Only that backend's section is used.
@@ -25,7 +25,7 @@ entity = "media_player.living_room"
 [show]
 # Bring the app on screen when playback starts, and give the screen back
 # release_after seconds after it pauses or stops. false: the app is shown only
-# when asked (pi-panel-ctl show music, a schedule, Home Assistant).
+# when asked (pi-panel-ctl show now-playing, a schedule, Home Assistant).
 auto = true
 # The priority of that request, against schedules and other apps' requests
 # (a doorbell camera at 50 still wins).

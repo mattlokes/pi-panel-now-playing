@@ -1,9 +1,9 @@
-# pi-panel-app-music: what is playing, Apple Music style.
+# pi-panel-now-playing: what is playing, Apple Music style.
 #
 # Served next to io.pipanel.App on $PI_PANEL_APP_SOCKET. Reach it with
-#   pi-panel-ctl app music io.pipanel.app.Music.GetStatus
+#   pi-panel-ctl app now-playing io.pipanel.app.NowPlaying.GetStatus
 # Play/pause and skipping are io.pipanel.App actions: play_pause, next, previous.
-interface io.pipanel.app.Music
+interface io.pipanel.app.NowPlaying
 
 method GetStatus() -> (
   backend: (music_assistant, home_assistant, demo),

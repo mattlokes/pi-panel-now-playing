@@ -16,7 +16,7 @@ from typing import Callable
 from . import ui  # noqa: F401 - pins the GTK versions before the import below
 from gi.repository import Gdk, GLib, Graphene, Gsk, Gtk  # noqa: E402
 
-log = logging.getLogger("pi-panel-music")
+log = logging.getLogger("pi-panel-now-playing")
 
 MAX_BYTES = 24 * 1024 * 1024
 TIMEOUT = 8.0
@@ -33,7 +33,7 @@ def fetch(url: str) -> bytes:
     if url.startswith("demo:"):
         from .backends.demo import artwork_png
         return artwork_png(int(url.removeprefix("demo:")))
-    request = urllib.request.Request(url, headers={"User-Agent": "pi-panel-app-music"})
+    request = urllib.request.Request(url, headers={"User-Agent": "pi-panel-now-playing"})
     with urllib.request.urlopen(request, timeout=TIMEOUT) as response:
         data = response.read(MAX_BYTES + 1)
     if len(data) > MAX_BYTES:

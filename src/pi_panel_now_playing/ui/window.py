@@ -16,7 +16,7 @@ from ..model import NowPlaying, time_labels
 from . import icons
 from .widgets import Artwork, Backdrop, Icon, Scrubber
 
-log = logging.getLogger("pi-panel-music")
+log = logging.getLogger("pi-panel-now-playing")
 
 DESIGN_WIDTH, DESIGN_HEIGHT = 1920, 1080
 
@@ -48,7 +48,7 @@ def screen_size() -> tuple[int, int]:
 
 class PlayerWindow(Gtk.Window):
     def __init__(self, display: Display, size: tuple[int, int], on_command: OnCommand) -> None:
-        super().__init__(title="Music")
+        super().__init__(title="Now Playing")
         self._on_command = on_command
         self._now = NowPlaying()
         self._clock = 0.0

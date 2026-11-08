@@ -15,7 +15,7 @@ from typing import Any, Coroutine
 class NetThread:
     def __init__(self) -> None:
         self._loop = asyncio.new_event_loop()
-        self._thread = threading.Thread(target=self._run, name="pi-panel-music-net", daemon=True)
+        self._thread = threading.Thread(target=self._run, name="pi-panel-now-playing-net", daemon=True)
 
     def start(self) -> None:
         self._thread.start()

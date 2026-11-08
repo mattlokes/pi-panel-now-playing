@@ -18,14 +18,14 @@ from pathlib import Path
 import pytest
 from websockets.asyncio.server import serve
 
-from pi_panel_music.autoshow import AutoShow
-from pi_panel_music.backends import create
-from pi_panel_music.backends.base import NEXT, PLAY_PAUSE, SEEK, websocket_url
-from pi_panel_music.backends.demo import DemoBackend, artwork_png
-from pi_panel_music.backends.home_assistant import apply_event, parse_entity
-from pi_panel_music.backends.music_assistant import image_url, parse_queue, select_queue
-from pi_panel_music.config import Config, ConfigError
-from pi_panel_music.model import IDLE, PAUSED, PLAYING, NowPlaying, clock_text, time_labels
+from pi_panel_now_playing.autoshow import AutoShow
+from pi_panel_now_playing.backends import create
+from pi_panel_now_playing.backends.base import NEXT, PLAY_PAUSE, SEEK, websocket_url
+from pi_panel_now_playing.backends.demo import DemoBackend, artwork_png
+from pi_panel_now_playing.backends.home_assistant import apply_event, parse_entity
+from pi_panel_now_playing.backends.music_assistant import image_url, parse_queue, select_queue
+from pi_panel_now_playing.config import Config, ConfigError
+from pi_panel_now_playing.model import IDLE, PAUSED, PLAYING, NowPlaying, clock_text, time_labels
 
 ROOT = Path(__file__).resolve().parent.parent
 MASS = {"url": "http://mass.local:8095"}
@@ -81,7 +81,7 @@ def test_config_rejects(data, msg):
 
 def test_manifest_parses():
     data = tomllib.loads((ROOT / "pi-panel.toml").read_text())
-    assert data["package"]["name"] == "music"
+    assert data["package"]["name"] == "now-playing"
     assert data["app"] == {"varlink": True, "rotate": False}
     assert data["config"]["templates"] == ["config.toml.example"]
 
@@ -89,7 +89,7 @@ def test_manifest_parses():
 def test_interface_file_is_valid_idl():
     if not shutil.which("varlinkctl"):
         pytest.skip("varlinkctl not installed")
-    path = ROOT / "src/pi_panel_music/io.pipanel.app.Music.varlink"
+    path = ROOT / "src/pi_panel_now_playing/io.pipanel.app.NowPlaying.varlink"
     subprocess.run(["varlinkctl", "validate-idl", str(path)], check=True, capture_output=True)
 
 
@@ -431,7 +431,7 @@ def test_music_assistant_login_and_player(section, schema, status):
 
 
 def test_backend_reconnects_after_the_server_drops_it(monkeypatch):
-    monkeypatch.setattr("pi_panel_music.backends.base.BACKOFF_FIRST", 0.05)
+    monkeypatch.setattr("pi_panel_now_playing.backends.base.BACKOFF_FIRST", 0.05)
     connections = 0
 
     async def hass(ws):
@@ -560,7 +560,7 @@ error NoSuchHold (token: string)
 def test_panel_hold_never_stacks_holds(tmp_path):
     from pi_panel_varlink import Interface, Server, VarlinkError
 
-    from pi_panel_music.autoshow import PanelHold
+    from pi_panel_now_playing.autoshow import PanelHold
 
     held: list[str] = []
     shows: list[dict] = []
@@ -591,9 +591,9 @@ def test_panel_hold_never_stacks_holds(tmp_path):
         server.add_interface(ctl)
         await server.start(address)
         try:
-            hold = PanelHold(address, "music", 10)
+            hold = PanelHold(address, "now-playing", 10)
             await hold.show()
-            assert held == ["token-1"] and shows == [{"app": "music", "priority": 10}]
+            assert held == ["token-1"] and shows == [{"app": "now-playing", "priority": 10}]
             counts.clear()
             await hold.show()                    # play again: the old hold is swapped, not added to
             assert held == ["token-2"]

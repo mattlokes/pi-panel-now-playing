@@ -1,6 +1,6 @@
 [project]
-name = "pi-panel-app-music"
-version = "0.1.0"
+name = "pi-panel-now-playing"
+version = "0.2.0"
 description = "pi-panel app: an Apple Music-style now-playing screen for Music Assistant or Home Assistant"
 readme = "README.md"
 requires-python = ">=3.11"
@@ -15,9 +15,9 @@ dependencies = [
 ]
 
 [project.scripts]
-pi-panel-music = "pi_panel_music.__main__:main"
+pi-panel-now-playing = "pi_panel_now_playing.__main__:main"
 
-# Installed by pi-panel-pkg into ~/pi-panel-apps/music, next to ~/pi-panel-core.
+# Installed by pi-panel-pkg into ~/pi-panel-apps/now-playing, next to ~/pi-panel-core.
 [tool.uv.sources]
 pi-panel-varlink = { path = "../../pi-panel-core/pi-panel-core-ctl/packages/pi-panel-varlink" }
 
@@ -31,7 +31,7 @@ requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [tool.hatch.build.targets.wheel]
-packages = ["src/pi_panel_music"]
+packages = ["src/pi_panel_now_playing"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

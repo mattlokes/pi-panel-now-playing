@@ -1,4 +1,4 @@
-"""pi-panel-app-music: what is playing, Apple Music style.
+"""pi-panel-now-playing: what is playing, Apple Music style.
 
 Three threads. GTK and all state live on the main (GLib) loop. The backend
 and pi-panel-ctl calls run on the network thread's asyncio loop. The
@@ -31,9 +31,9 @@ from .config import Display as DisplayConfig
 from .model import IDLE, PAUSED, PLAYING, NowPlaying
 from .net import NetThread
 
-log = logging.getLogger("pi-panel-music")
+log = logging.getLogger("pi-panel-now-playing")
 
-VERSION = "0.1.0"
+VERSION = "0.2.0"
 TICK_MS = 250             # how often the progress line moves, while it is seen moving
 
 
@@ -111,7 +111,7 @@ class Player:
         show = self.config.show
         if not show.auto or not address:
             return
-        hold = self.hold = PanelHold(address, os.environ.get("PI_PANEL_NAME", "music"),
+        hold = self.hold = PanelHold(address, os.environ.get("PI_PANEL_NAME", "now-playing"),
                                      show.priority)
         self.autoshow = AutoShow(show.release_after,
                                  show=lambda: self.net.submit(hold.show()),
@@ -262,7 +262,7 @@ class Player:
 
 
 def music_interface(player: Player, on_main) -> Interface:
-    iface = Interface(files(__package__).joinpath("io.pipanel.app.Music.varlink")
+    iface = Interface(files(__package__).joinpath("io.pipanel.app.NowPlaying.varlink")
                       .read_text(encoding="utf-8"))
 
     @iface.method("GetStatus")
@@ -273,14 +273,14 @@ def music_interface(player: Player, on_main) -> Interface:
     async def seek(call: Call) -> None:
         position = call.param("position", (int, float))
         if not on_main(lambda: player.now.has_track and player.now.can_seek):
-            raise VarlinkError("io.pipanel.app.Music.NotSeekable", {})
+            raise VarlinkError("io.pipanel.app.NowPlaying.NotSeekable", {})
         on_main(player.command, SEEK, max(0.0, float(position)))
 
     @iface.method("Reload")
     async def reload(call: Call) -> None:
         error = on_main(player.reload)
         if error:
-            raise VarlinkError("io.pipanel.app.Music.InvalidConfig", {"message": error})
+            raise VarlinkError("io.pipanel.app.NowPlaying.InvalidConfig", {"message": error})
 
     return iface
 
@@ -296,7 +296,7 @@ def parse_size(text: str) -> tuple[int, int]:
 
 
 def main() -> int:
-    p = argparse.ArgumentParser(prog="pi-panel-music")
+    p = argparse.ArgumentParser(prog="pi-panel-now-playing")
     p.add_argument("--config", type=Path, help="config.toml (not needed with --demo)")
     p.add_argument("--log-level", default="INFO")
     dev = p.add_argument_group("for working on the screen")
@@ -333,7 +333,7 @@ def main() -> int:
 
     # The Wayland app_id; pi-panel matches the window by its unit, but this
     # is what `pi-panel-ctl` output shows.
-    GLib.set_prgname(os.environ.get("PI_PANEL_NAME", "music"))
+    GLib.set_prgname(os.environ.get("PI_PANEL_NAME", "now-playing"))
     if not Gtk.init_check():
         print("cannot open the display (is WAYLAND_DISPLAY set?)", file=sys.stderr)
         return 1
@@ -360,7 +360,7 @@ def main() -> int:
         return result[0] if result else None
 
     service = AppService(
-        product="pi-panel-app-music", version=VERSION,
+        product="pi-panel-now-playing", version=VERSION,
         on_visible=lambda visible: idle(player.set_visible, visible),
         actions={
             "play_pause": ("Play / pause", lambda: idle(player.command, PLAY_PAUSE)),
@@ -378,7 +378,7 @@ def main() -> int:
     # app contract's 5 seconds.
     for sig in (signal.SIGTERM, signal.SIGINT):
         GLib.unix_signal_add(GLib.PRIORITY_HIGH, sig, lambda: loop.quit() or False)
-    # SIGHUP: re-read config.toml (`systemctl kill -s HUP pi-panel-app@music`).
+    # SIGHUP: re-read config.toml (`systemctl kill -s HUP pi-panel-app@now-playing`).
     if not args.demo:
         GLib.unix_signal_add(GLib.PRIORITY_DEFAULT, signal.SIGHUP,
                              lambda: (player.reload(), True)[1])

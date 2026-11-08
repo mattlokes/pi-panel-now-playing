@@ -1,4 +1,4 @@
-# pi-panel-app-music
+# pi-panel-now-playing
 
 A now-playing screen for [pi-panel](https://github.com/mattlokes/pi-panel-core),
 styled after Apple Music: the cover over its own blurred colours, the title
@@ -18,11 +18,11 @@ It follows one player, from either of two sources:
 On the panel:
 
 ```bash
-sudo apt install --no-install-recommends python3-gi gir1.2-gtk-4.0   # GTK 4's Python bindings
-pi-panel-pkg install https://github.com/mattlokes/pi-panel-app-music.git
-$EDITOR ~/.config/pi-panel/apps/music/config.toml
-chmod 600 ~/.config/pi-panel/apps/music/config.toml      # it holds a token
-pi-panel-ctl enable music
+sudo apt install --no-install-recommends python3-gi gir1.2-gtk-4.0  # GTK 4's Python bindings
+pi-panel-pkg install https://github.com/mattlokes/pi-panel-now-playing.git
+$EDITOR ~/.config/pi-panel/apps/now-playing/config.toml
+chmod 600 ~/.config/pi-panel/apps/now-playing/config.toml           # it holds a token
+pi-panel-ctl enable now-playing
 ```
 
 ## Configuration
@@ -59,8 +59,8 @@ entity = "media_player.kitchen"
 - Nothing needs setting up in Home Assistant. The app uses its WebSocket API: it is sent every change to the entity, and sends play/pause, skip and seek as `media_player` service calls.
 - Skip and seek are offered only if the entity says it supports them.
 
-After editing, apply it without a restart: `pi-panel-ctl action music reload`
-(or `systemctl kill -s HUP pi-panel-app@music`). An invalid file is reported
+After editing, apply it without a restart: `pi-panel-ctl action now-playing reload`
+(or `systemctl kill -s HUP pi-panel-app@now-playing`). An invalid file is reported
 and the running configuration stays.
 
 ### When it is on screen
@@ -75,7 +75,7 @@ Picking another app (Home Assistant's *Showing* select, `pi-panel-ctl
 switch`, or `pi-panel-ctl next`) dismisses it. Pressing play again after a
 pause brings it back, but a change of track doesn't.
 
-Set `auto = false` to show it only on request (`pi-panel-ctl show music`, a
+Set `auto = false` to show it only on request (`pi-panel-ctl show now-playing`, a
 schedule, or Home Assistant).
 
 ### Layout
@@ -93,11 +93,11 @@ line to seek.
 The same controls are pi-panel actions, so they work without touch:
 
 ```bash
-pi-panel-ctl action music play_pause
-pi-panel-ctl action music next
-pi-panel-ctl action music previous
-pi-panel-ctl app music io.pipanel.app.Music.Seek '{"position": 90}'
-pi-panel-ctl app music io.pipanel.app.Music.GetStatus
+pi-panel-ctl action now-playing play_pause
+pi-panel-ctl action now-playing next
+pi-panel-ctl action now-playing previous
+pi-panel-ctl app now-playing io.pipanel.app.NowPlaying.Seek '{"position": 90}'
+pi-panel-ctl app now-playing io.pipanel.app.NowPlaying.GetStatus
 ```
 
 With the MQTT plugin installed, each action is also a Home Assistant button.
@@ -109,8 +109,8 @@ Wayland display and GTK 4, nothing else:
 
 ```bash
 uv venv --system-site-packages --python /usr/bin/python3 && uv sync
-.venv/bin/pi-panel-music --demo                      # or: --demo paused, --demo idle
-.venv/bin/pi-panel-music --demo --layout stacked --screenshot shot.png
+.venv/bin/pi-panel-now-playing --demo                      # or: --demo paused, --demo idle
+.venv/bin/pi-panel-now-playing --demo --layout stacked --screenshot shot.png
 ```
 
 ## Development
@@ -125,5 +125,5 @@ The tests run both backends against small fake servers on localhost.
 ## Credits
 
 Text is set in [Inter](https://rsms.me/inter/) (SIL Open Font License; the
-font and its licence are in `src/pi_panel_music/ui/fonts/`). The icons are
+font and its licence are in `src/pi_panel_now_playing/ui/fonts/`). The icons are
 drawn for this app. No Apple assets are used.

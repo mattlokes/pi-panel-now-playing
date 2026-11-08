@@ -18,7 +18,7 @@ from websockets.exceptions import WebSocketException
 
 from ..model import NowPlaying
 
-log = logging.getLogger("pi-panel-music")
+log = logging.getLogger("pi-panel-now-playing")
 
 OnUpdate = Callable[[NowPlaying], None]
 # (connected, what is wrong, or "" when nothing is)

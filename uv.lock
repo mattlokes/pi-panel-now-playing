@@ -30,8 +30,8 @@ wheels = [
 ]
 
 [[package]]
-name = "pi-panel-app-music"
-version = "0.1.0"
+name = "pi-panel-now-playing"
+version = "0.2.0"
 source = { editable = "." }
 dependencies = [
     { name = "pi-panel-varlink" },

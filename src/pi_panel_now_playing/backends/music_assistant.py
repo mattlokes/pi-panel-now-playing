@@ -21,7 +21,7 @@ from ..model import IDLE, PAUSED, PLAYING, NowPlaying
 from .base import NEXT, PLAY_PAUSE, PREVIOUS, SEEK, Backend, BackendError, OnStatus, OnUpdate
 from .base import websocket_url
 
-log = logging.getLogger("pi-panel-music")
+log = logging.getLogger("pi-panel-now-playing")
 
 SCHEMA_AUTH = 28          # a token is required
 SCHEMA_PROXY_ID = 31      # /imageproxy/<proxy_id>

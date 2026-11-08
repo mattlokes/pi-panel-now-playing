@@ -8,7 +8,7 @@ from pathlib import Path
 
 from gi.repository import Graphene, Gtk
 
-log = logging.getLogger("pi-panel-music")
+log = logging.getLogger("pi-panel-now-playing")
 
 
 def save(window: Gtk.Window, path: Path) -> None:

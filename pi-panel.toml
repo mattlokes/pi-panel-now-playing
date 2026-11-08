@@ -1,11 +1,11 @@
 [package]
-name = "music"
+name = "now-playing"
 kind = "app"
-version = "0.1.0"
+version = "0.2.0"
 description = "Now playing, Apple Music style: Music Assistant or a Home Assistant media player"
 
 [run]
-exec = ".venv/bin/pi-panel-music --config ${config_dir}/config.toml"
+exec = ".venv/bin/pi-panel-now-playing --config ${config_dir}/config.toml"
 # GTK_A11Y: there is no accessibility bus under the unit, and GTK would
 # otherwise wait for one at start.
 # GDK_DISABLE: GTK renders with GL (V3D on a Pi). Left alone it probes

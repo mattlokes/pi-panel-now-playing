@@ -12,7 +12,7 @@ from typing import Callable
 
 from pi_panel_varlink import Client, ProtocolError, VarlinkError, VarlinkTimeout, VarlinkUnavailable
 
-log = logging.getLogger("pi-panel-music")
+log = logging.getLogger("pi-panel-now-playing")
 
 
 # Players stop for up to a second between tracks. A stop shorter than this
