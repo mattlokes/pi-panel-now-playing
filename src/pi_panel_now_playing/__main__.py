@@ -298,6 +298,8 @@ def parse_size(text: str) -> tuple[int, int]:
 def main() -> int:
     p = argparse.ArgumentParser(prog="pi-panel-now-playing")
     p.add_argument("--config", type=Path, help="config.toml (not needed with --demo)")
+    p.add_argument("--check-config", type=Path, metavar="PATH",
+                   help="validate a config.toml and exit: 0 if good, 1 with the reason if not")
     p.add_argument("--log-level", default="INFO")
     dev = p.add_argument_group("for working on the screen")
     dev.add_argument("--demo", nargs="?", const=PLAYING, choices=(PLAYING, PAUSED, IDLE),
@@ -310,6 +312,15 @@ def main() -> int:
     dev.add_argument("--screenshot", type=Path, metavar="PNG",
                      help="save the window as a PNG after a few seconds, and exit")
     args = p.parse_args()
+    if args.check_config:
+        # Before GTK and the network: pi-panel-ctl config check runs this.
+        try:
+            Config.load(args.check_config)
+        except ConfigError as exc:
+            print(f"config error: {exc}", file=sys.stderr)
+            return 1
+        print(f"config ok: {args.check_config}")
+        return 0
     logging.basicConfig(level=getattr(logging, args.log_level.upper(), logging.INFO),
                         format="%(levelname)-7s %(message)s", stream=sys.stderr)
     # asyncio.CancelledError noise from websockets' keepalive at teardown.

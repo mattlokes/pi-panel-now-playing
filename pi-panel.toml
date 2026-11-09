@@ -20,6 +20,8 @@ command = "uv venv --system-site-packages --python /usr/bin/python3 --allow-exis
 
 [config]
 templates = ["config.toml.example"]
+# Run by `pi-panel-ctl config check` (and before `config import`): no GTK, no network.
+check = ".venv/bin/pi-panel-now-playing --check-config ${config_dir}/config.toml"
 
 [system]
 packages = [

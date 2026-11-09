@@ -620,3 +620,18 @@ def test_panel_hold_never_stacks_holds(tmp_path):
         assert hold.token is None
 
     asyncio.run(scenario())
+
+
+def test_check_config_flag(tmp_path, capsys, monkeypatch):
+    """`[config] check` in the manifest: validates without GTK or a network."""
+    import sys
+    from pi_panel_now_playing.__main__ import main
+    monkeypatch.setattr(sys, "argv", ["x", "--check-config", str(ROOT / "config.toml.example")])
+    assert main() == 0
+    assert "config ok" in capsys.readouterr().out
+    bad = tmp_path / "config.toml"
+    bad.write_text('backend = "winamp"\n')
+    monkeypatch.setattr(sys, "argv", ["x", "--check-config", str(bad)])
+    assert main() == 1
+    assert "config error" in capsys.readouterr().err
+    assert "gi" not in sys.modules or "gi.repository.Gtk" not in sys.modules
