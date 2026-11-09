@@ -10,7 +10,7 @@ uv run pytest      # offline; GTK isn't needed for these
 
 ## The config holds a token
 
-It lives in `~/.config/pi-panel/apps/now-playing/config.toml` on the Pi. A local
+It lives in `/persistent/pi-panel/config/apps/now-playing/config.toml` on the Pi. A local
 `config.toml` is gitignored. Do not commit it, print it, or paste it into a
 log or a message. Home Assistant's artwork URLs carry a token too, which is
 why `artwork.py` never logs a URL.
@@ -24,7 +24,7 @@ The dev machine has no GTK, so the screen is run on `pi@jazz` (see
 rsync -a --delete --exclude .git --exclude .venv --exclude __pycache__ ./ pi@jazz:pi-panel-dev/now-playing/
 # on jazz: a headless compositor, then the app as the unit its slot matches
 systemd-run --user --unit pp-dev -E WLR_BACKENDS=headless -E WLR_RENDERER=gles2 \
-    ~/pi-panel-core/pi-panel-core-compositor/build/pi-panel-compositor \
+    /opt/pi-panel/pi-panel-core/pi-panel-core-compositor/build/pi-panel-compositor \
     --ipc-socket /tmp/pp-dev.varlink --wayland-socket pp-dev-0
 varlinkctl call /tmp/pp-dev.varlink io.pipanel.Compositor.RegisterSlot '{"name":"now-playingdev"}'
 systemd-run --user --wait --unit pi-panel-app@now-playingdev -E WAYLAND_DISPLAY=pp-dev-0 \
